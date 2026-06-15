@@ -1,10 +1,10 @@
-# cicd-test/.github/workflows/deploy.yml
 on:
   push:
-    branches: [develop, staging, main]
+    branches: [main]
 
 jobs:
   deploy:
     uses: erichamers/cicd-templates/.github/workflows/hello.yml@main
     with:
       environment: ${{ github.ref_name == 'main' && 'PRD' || github.ref_name == 'staging' && 'STG' || 'DEV' }}
+    secrets: inherit
