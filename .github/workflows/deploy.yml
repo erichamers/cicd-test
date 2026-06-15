@@ -1,0 +1,10 @@
+# cicd-test/.github/workflows/deploy.yml
+on:
+  push:
+    branches: [develop, staging, main]
+
+jobs:
+  deploy:
+    uses: <seu-usuario>/cicd-templates/.github/workflows/hello.yml@main
+    with:
+      environment: ${{ github.ref_name == 'main' && 'PRD' || github.ref_name == 'staging' && 'STG' || 'DEV' }}
