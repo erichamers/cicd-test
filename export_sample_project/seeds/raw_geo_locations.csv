@@ -1,0 +1,22 @@
+city,state_code,state_name,country_code,country_name,region
+Rochester,MN,Minnesota,US,United States,Midwest
+Baltimore,MD,Maryland,US,United States,Northeast
+Houston,TX,Texas,US,United States,South
+Boston,MA,Massachusetts,US,United States,Northeast
+San Francisco,CA,California,US,United States,West
+Bannockburn,IL,Illinois,US,United States,Midwest
+Dallas,TX,Texas,US,United States,South
+Fort Washington,PA,Pennsylvania,US,United States,Northeast
+Miami,FL,Florida,US,United States,South
+Plainfield,IN,Indiana,US,United States,Midwest
+Cleveland,OH,Ohio,US,United States,Midwest
+Los Angeles,CA,California,US,United States,West
+New York,NY,New York,US,United States,Northeast
+Denver,CO,Colorado,US,United States,West
+Nashville,TN,Tennessee,US,United States,South
+Stanford,CA,California,US,United States,West
+Eden Prairie,MN,Minnesota,US,United States,Midwest
+Phoenix,AZ,Arizona,US,United States,West
+Atlanta,GA,Georgia,US,United States,South
+Philadelphia,PA,Pennsylvania,US,United States,Northeast
+Indianapolis,IN,Indiana,US,United States,Midwest

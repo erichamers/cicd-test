@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: int_shipments_enriched
+    description: >
+      Shipment records enriched with customer and warehouse context.
+      Adds calculated fulfillment metrics (days to ship, days in transit,
+      total fulfillment days) and denormalized location attributes.
+    columns:
+      - name: shipment_id
+        description: Unique shipment identifier (from stg_shipments).
+      - name: days_to_ship
+        description: Number of days between order placement and warehouse dispatch.
+      - name: days_in_transit
+        description: Number of days between dispatch and delivery.
+      - name: total_fulfillment_days
+        description: End-to-end fulfillment time from order to delivery.
+      - name: customer_region
+        description: Geographic sales region of the receiving customer.
+      - name: customer_geo_location_key
+        description: Foreign key to dim_geo_locations for the customer's geographic location.
+      - name: warehouse_geo_location_key
+        description: Foreign key to dim_geo_locations for the warehouse's geographic location.
+
+  - name: int_shipment_items_enriched
+    description: >
+      Shipment line items enriched with product master data. Calculates
+      line-item revenue based on quantity shipped and wholesale acquisition cost.
+    columns:
+      - name: shipment_item_id
+        description: Unique line item identifier.
+      - name: line_item_revenue_usd
+        description: Calculated revenue for this line (quantity * unit_price_usd).
+      - name: is_controlled_substance
+        description: Whether the shipped product is a DEA-controlled substance.
+      - name: therapeutic_area
+        description: Therapeutic classification of the product.

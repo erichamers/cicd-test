@@ -1,0 +1,9 @@
+pharma_shipments:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      database: CICD_DBT_TEST_DB
+      role: SYSADMIN
+      schema: RAW
+      warehouse: COMPUTE_WH

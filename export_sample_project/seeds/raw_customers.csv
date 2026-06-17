@@ -1,0 +1,21 @@
+customer_id,customer_name,customer_type,address_line_1,city,state,zip_code,region,dea_number,is_active
+5001,Mayo Clinic Pharmacy,Hospital,200 First St SW,Rochester,MN,55905,Midwest,BM1234563,true
+5002,Johns Hopkins Specialty Pharmacy,Hospital,600 N Wolfe St,Baltimore,MD,21287,Northeast,AJ9876541,true
+5003,MD Anderson Pharmacy,Hospital,1515 Holcombe Blvd,Houston,TX,77030,South,FM5432198,true
+5004,Dana-Farber Cancer Pharmacy,Hospital,450 Brookline Ave,Boston,MA,02215,Northeast,BD6543217,true
+5005,UCSF Medical Center Pharmacy,Hospital,505 Parnassus Ave,San Francisco,CA,94143,West,BU7654321,true
+5006,Option Care Health - Chicago,Specialty Pharmacy,3000 Lakeside Dr,Bannockburn,IL,60015,Midwest,AO8765432,true
+5007,BioScrip Infusion - Dallas,Specialty Pharmacy,5220 Spring Valley Rd,Dallas,TX,75254,South,AB4321987,true
+5008,Orsini Specialty Pharmacy,Specialty Pharmacy,1100 Virginia Dr,Fort Washington,PA,19034,Northeast,FO3219876,true
+5009,Amber Specialty Pharmacy,Specialty Pharmacy,8000 Governors Square Blvd,Miami,FL,33178,South,BA2198765,true
+5010,Biologics Inc,Specialty Pharmacy,12275 Quaker Dr,Plainfield,IN,46168,Midwest,BB1987654,true
+5011,Cleveland Clinic Pharmacy,Hospital,9500 Euclid Ave,Cleveland,OH,44195,Midwest,BC8761234,true
+5012,Cedars-Sinai Pharmacy,Hospital,8700 Beverly Blvd,Los Angeles,CA,90048,West,FC7612345,true
+5013,NYU Langone Pharmacy,Hospital,550 1st Ave,New York,NY,10016,Northeast,BN6123456,true
+5014,Shields Health Solutions - Denver,Specialty Pharmacy,1800 Glenarm Pl,Denver,CO,80202,West,AS5612347,true
+5015,PharMerica - Nashville,Specialty Pharmacy,3820 Cleghorn Ave,Nashville,TN,37215,South,BP4561238,true
+5016,Mount Sinai Pharmacy,Hospital,1 Gustave L Levy Pl,New York,NY,10029,Northeast,BM3456129,true
+5017,Stanford Health Pharmacy,Hospital,300 Pasteur Dr,Stanford,CA,94305,West,BS2345618,true
+5018,Optum Specialty Pharmacy,Specialty Pharmacy,11000 Optum Cir,Eden Prairie,MN,55344,Midwest,AO1234567,true
+5019,Walgreens Specialty - Phoenix,Specialty Pharmacy,1417 N 3rd St,Phoenix,AZ,85004,West,FW9871234,true
+5020,Emory Healthcare Pharmacy,Hospital,1364 Clifton Rd NE,Atlanta,GA,30322,South,BE8712345,false

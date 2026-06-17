@@ -1,0 +1,50 @@
+Act as a Senior Data Engineer and Snowflake/dbt Solution Architect with experience in pharmaceutical data platforms.
+
+I need your help designing a simple but realistic pharmaceutical data engineering use case using Snowflake and dbt, inspired by the business context of a US pharmaceutical company such as Jazz Pharmaceuticals (let's use the shipments context).
+
+The main objective is to demonstrate how Cortex Code can accelerate and improve data engineering work by helping developers generate dbt models, design data models, create tests, document logic, identify recommendations, and standardize development patterns.
+
+Context:
+The use case should be suitable for a technical demo. It should be simple enough to explain clearly, but realistic enough to show business value in a pharmaceutical data environment.
+
+Key Requirements:
+1. Use Snowflake as the target data platform.
+2. Use dbt running directly inside Snowflake.
+3. Load sample data files using dbt seeds.
+4. Create a simple pharmaceutical data model using seeded source files.
+5. Demonstrate how Cortex Code can assist with:
+   - Generating dbt models
+   - Creating staging, intermediate, and mart layers
+   - Suggesting dimensional modeling patterns
+   - Generating dbt tests
+   - Creating schema.yml documentation
+   - Recommending data quality checks
+   - Improving model naming conventions and SQL readability
+   - Identifying potential improvements or risks in the model design
+
+Use Case Scope:
+Please propose a simple pharmaceutical analytics use case, such as drug shipments.
+
+Expected Output:
+Please provide the following:
+
+1. A clear use case description
+2. The business problem being solved
+3. The sample seed files required
+4. Suggested columns for each seed file
+5. A recommended dbt project structure & initialized.
+6. A proposed data model, including staging, intermediate, and mart layers
+7. Example dbt models that could be generated
+8. Example dbt tests
+9. Example schema.yml documentation
+10. Example prompts that a developer could give to Cortex Code during the demo
+11. Recommendations to make the demo more realistic and impactful
+12. A short explanation of the business value this demo would communicate to stakeholders
+
+Important Considerations:
+- Keep the example simple and demo-friendly.
+- Avoid using real patient data or sensitive information.
+- Use synthetic sample data only.
+- Follow dbt best practices for naming, modularity, tests, and documentation.
+- Make the use case relevant to a pharmaceutical company operating in the US market.
+- Structure the answer in a way that can be easily converted into a demo guide or technical walkthrough.

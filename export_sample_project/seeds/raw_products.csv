@@ -1,0 +1,16 @@
+product_id,product_name,ndc_code,therapeutic_area,dosage_form,unit_price_usd,is_controlled_substance,dea_schedule
+1001,Xyrem,68727-100-01,Sleep Disorders,Oral Solution,1250.00,true,III
+1002,Xywav,68727-400-01,Sleep Disorders,Oral Solution,1180.00,true,III
+1003,Epidiolex,68727-200-01,Neuroscience,Oral Solution,1350.00,true,V
+1004,Zepzelca,68727-300-01,Oncology,Injectable,4200.00,false,
+1005,Rylaze,68727-500-01,Oncology,Injectable,3800.00,false,
+1006,Defitelio,68727-600-01,Hematology,Injectable,5600.00,false,
+1007,Vyxeos,68727-700-01,Hematology,Injectable,7100.00,false,
+1008,Sunosi,68727-800-01,Sleep Disorders,Tablet,450.00,true,IV
+1009,Luvox CR,68727-900-01,Neuroscience,Capsule,320.00,false,
+1010,Prialt,68727-110-01,Neuroscience,Injectable,2900.00,false,
+1011,Erwinaze,68727-120-01,Oncology,Injectable,4100.00,false,
+1012,Marqibo,68727-130-01,Oncology,Injectable,6500.00,false,
+1013,Elzonris,68727-140-01,Hematology,Injectable,8200.00,false,
+1014,Daurismo,68727-150-01,Oncology,Capsule,2750.00,false,
+1015,Nipent,68727-160-01,Immunology,Injectable,3400.00,false,

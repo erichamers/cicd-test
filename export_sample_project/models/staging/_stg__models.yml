@@ -1,0 +1,227 @@
+version: 2
+
+models:
+  - name: stg_products
+    description: >
+      Staged product master data. Each row represents a pharmaceutical product
+      in the company's portfolio with NDC code, therapeutic classification,
+      and pricing information.
+    columns:
+      - name: product_id
+        description: Unique identifier for each product.
+        tests:
+          - unique
+          - not_null
+      - name: product_name
+        description: Brand name of the pharmaceutical product.
+        tests:
+          - not_null
+      - name: ndc_code
+        description: National Drug Code (NDC) — the unique 10-digit identifier assigned by the FDA.
+        tests:
+          - unique
+          - not_null
+      - name: therapeutic_area
+        description: Therapeutic classification (e.g., Oncology, Sleep Disorders, Neuroscience).
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Sleep Disorders', 'Oncology', 'Neuroscience', 'Hematology', 'Immunology']
+      - name: dosage_form
+        description: Physical form of the drug (e.g., Tablet, Injectable, Oral Solution).
+        tests:
+          - not_null
+      - name: unit_price_usd
+        description: Wholesale acquisition cost (WAC) per unit in US dollars.
+        tests:
+          - not_null
+      - name: is_controlled_substance
+        description: Whether the product is a DEA-scheduled controlled substance.
+        tests:
+          - not_null
+      - name: dea_schedule
+        description: DEA schedule classification (I-V) if the product is a controlled substance. Null otherwise.
+
+  - name: stg_customers
+    description: >
+      Staged customer data representing healthcare facilities (hospitals and
+      specialty pharmacies) that receive drug shipments.
+    columns:
+      - name: customer_id
+        description: Unique identifier for each customer facility.
+        tests:
+          - unique
+          - not_null
+      - name: customer_name
+        description: Full name of the healthcare facility.
+        tests:
+          - not_null
+      - name: customer_type
+        description: Classification of the customer (Hospital or Specialty Pharmacy).
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Hospital', 'Specialty Pharmacy']
+      - name: city
+        description: City where the customer facility is located.
+      - name: state
+        description: US state abbreviation.
+        tests:
+          - not_null
+      - name: zip_code
+        description: 5-digit US ZIP code.
+      - name: region
+        description: Geographic sales region.
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Northeast', 'South', 'Midwest', 'West']
+      - name: dea_number
+        description: Drug Enforcement Administration registration number.
+        tests:
+          - unique
+          - not_null
+      - name: is_active
+        description: Whether the customer is currently active and eligible to receive shipments.
+        tests:
+          - not_null
+
+  - name: stg_warehouses
+    description: >
+      Staged warehouse/distribution center data. Each row represents a
+      physical location from which drug shipments originate.
+    columns:
+      - name: warehouse_id
+        description: Unique identifier for each distribution center.
+        tests:
+          - unique
+          - not_null
+      - name: warehouse_name
+        description: Name of the distribution center.
+        tests:
+          - not_null
+      - name: city
+        description: City where the warehouse is located.
+      - name: state
+        description: US state abbreviation.
+        tests:
+          - not_null
+      - name: capacity_units
+        description: Maximum storage capacity in units.
+        tests:
+          - not_null
+
+  - name: stg_geo_locations
+    description: >
+      Staged geographic location reference data. Each row represents a unique
+      geographic location at the city-state-country grain, standardized and
+      deduplicated for use as a conformed dimension.
+    columns:
+      - name: city
+        description: City name, title-cased and trimmed.
+        tests:
+          - not_null
+      - name: state_code
+        description: Two-character ISO 3166-2 state/province code (e.g., MN, CA).
+        tests:
+          - not_null
+      - name: state_name
+        description: Full state or province name (e.g., Minnesota).
+        tests:
+          - not_null
+      - name: country_code
+        description: Two-character ISO 3166-1 alpha-2 country code (e.g., US).
+        tests:
+          - not_null
+      - name: country_name
+        description: Full country name (e.g., United States).
+        tests:
+          - not_null
+      - name: region
+        description: Business-defined geographic region (e.g., Midwest, Northeast, South, West).
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Northeast', 'South', 'Midwest', 'West']
+
+  - name: stg_shipments
+    description: >
+      Staged shipment header records. Each row represents a single shipment
+      order from a warehouse to a customer, with tracking and status details.
+    columns:
+      - name: shipment_id
+        description: Unique identifier for each shipment order.
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: Foreign key to the customer receiving the shipment.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+      - name: warehouse_id
+        description: Foreign key to the originating warehouse.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_warehouses')
+              field: warehouse_id
+      - name: order_date
+        description: Date the order was placed.
+        tests:
+          - not_null
+      - name: ship_date
+        description: Date the shipment left the warehouse. Null if status is PENDING.
+      - name: delivery_date
+        description: Date the shipment was received. Null if not yet delivered.
+      - name: shipment_status
+        description: Current status of the shipment.
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['PENDING', 'SHIPPED', 'IN_TRANSIT', 'DELIVERED', 'RETURNED']
+      - name: carrier
+        description: Shipping carrier used for delivery.
+        tests:
+          - not_null
+      - name: tracking_number
+        description: Carrier tracking number for the shipment.
+
+  - name: stg_shipment_items
+    description: >
+      Staged shipment line items. Each row represents a specific product and
+      quantity included in a shipment, with lot tracking for regulatory compliance.
+    columns:
+      - name: shipment_item_id
+        description: Unique identifier for each line item.
+        tests:
+          - unique
+          - not_null
+      - name: shipment_id
+        description: Foreign key to the parent shipment.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_shipments')
+              field: shipment_id
+      - name: product_id
+        description: Foreign key to the product being shipped.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_products')
+              field: product_id
+      - name: quantity_shipped
+        description: Number of units shipped in this line item.
+        tests:
+          - not_null
+      - name: lot_number
+        description: Manufacturing lot/batch number for traceability.
+        tests:
+          - not_null
+      - name: expiration_date
+        description: Product expiration date for this lot.
+        tests:
+          - not_null

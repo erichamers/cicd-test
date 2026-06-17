@@ -1,0 +1,30 @@
+name: 'pharma_shipments'
+version: '1.0.0'
+
+profile: 'pharma_shipments'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+seeds:
+  pharma_shipments:
+    +schema: raw
+
+models:
+  pharma_shipments:
+    staging:
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: ephemeral
+    marts:
+      +materialized: table
+      +schema: marts

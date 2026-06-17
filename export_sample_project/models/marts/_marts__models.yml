@@ -1,0 +1,228 @@
+version: 2
+
+models:
+  - name: dim_products
+    description: >
+      Product dimension table. Contains master data for each pharmaceutical
+      product including NDC code, therapeutic area, pricing, and controlled
+      substance classification. Includes a derived price_tier for segmentation.
+    columns:
+      - name: product_key
+        description: Surrogate key generated from product_id.
+        tests:
+          - unique
+          - not_null
+      - name: product_id
+        description: Natural key — unique product identifier.
+        tests:
+          - unique
+          - not_null
+      - name: product_name
+        description: Brand name of the pharmaceutical product.
+      - name: ndc_code
+        description: National Drug Code (FDA unique identifier).
+      - name: therapeutic_area
+        description: Therapeutic classification of the product.
+      - name: dosage_form
+        description: Physical form of the drug (Tablet, Injectable, etc.).
+      - name: unit_price_usd
+        description: Wholesale acquisition cost per unit.
+      - name: is_controlled_substance
+        description: DEA controlled substance flag.
+      - name: dea_schedule
+        description: DEA schedule (I-V) if applicable.
+      - name: price_tier
+        description: Derived pricing segment (Premium, High, Standard, Economy).
+        tests:
+          - accepted_values:
+              values: ['Premium', 'High', 'Standard', 'Economy']
+
+  - name: dim_customers
+    description: >
+      Customer dimension table. Contains healthcare facilities that receive
+      pharmaceutical shipments, with geographic hierarchy and compliance identifiers.
+    columns:
+      - name: customer_key
+        description: Surrogate key generated from customer_id.
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: Natural key — unique customer identifier.
+        tests:
+          - unique
+          - not_null
+      - name: customer_name
+        description: Full facility name.
+      - name: customer_type
+        description: Facility classification (Hospital or Specialty Pharmacy).
+      - name: region
+        description: Geographic sales region.
+      - name: dea_number
+        description: DEA registration number for controlled substance handling.
+      - name: is_active
+        description: Whether the customer is currently active.
+      - name: geo_location_key
+        description: Foreign key to dim_geo_locations conformed geographic dimension.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_geo_locations')
+              field: geo_location_key
+
+  - name: dim_warehouses
+    description: >
+      Warehouse dimension table. Distribution centers from which shipments
+      originate, with capacity classification.
+    columns:
+      - name: warehouse_key
+        description: Surrogate key generated from warehouse_id.
+        tests:
+          - unique
+          - not_null
+      - name: warehouse_id
+        description: Natural key — unique warehouse identifier.
+        tests:
+          - unique
+          - not_null
+      - name: warehouse_name
+        description: Distribution center name.
+      - name: capacity_tier
+        description: Derived capacity classification (Large, Medium, Small).
+      - name: geo_location_key
+        description: Foreign key to dim_geo_locations conformed geographic dimension.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_geo_locations')
+              field: geo_location_key
+
+  - name: dim_geo_locations
+    description: >
+      Conformed geographic dimension table. Contains standardized geographic
+      locations at the city-state-country grain with full hierarchy attributes.
+      Designed as a reusable dimension that can be joined from any fact or
+      dimension table referencing a geographic location.
+    columns:
+      - name: geo_location_key
+        description: Surrogate key generated from city, state_code, and country_code.
+        tests:
+          - unique
+          - not_null
+      - name: geo_location_id
+        description: >
+          Human-readable natural key in format COUNTRY_CODE-STATE_CODE-CITY
+          (e.g., US-MN-ROCHESTER).
+        tests:
+          - unique
+          - not_null
+      - name: city
+        description: City name, standardized with title case.
+      - name: state_province
+        description: Full state or province name (e.g., Minnesota).
+      - name: state_code
+        description: Two-character state/province code (e.g., MN).
+      - name: country
+        description: Full country name (e.g., United States).
+      - name: country_code
+        description: Two-character ISO 3166-1 alpha-2 country code (e.g., US).
+      - name: region
+        description: Business-defined geographic region for sales and reporting segmentation.
+        tests:
+          - accepted_values:
+              values: ['Northeast', 'South', 'Midwest', 'West']
+      - name: geo_hierarchy_level_1
+        description: Top level of geographic hierarchy (Country).
+      - name: geo_hierarchy_level_2
+        description: Mid level of geographic hierarchy (State/Province).
+      - name: geo_hierarchy_level_3
+        description: Lowest level of geographic hierarchy (City).
+
+  - name: fct_shipments
+    description: >
+      Shipment fact table at the shipment header grain. Each row represents
+      a single shipment with aggregated line-item metrics, fulfillment timing,
+      and geographic context for analysis.
+    columns:
+      - name: shipment_key
+        description: Surrogate key generated from shipment_id.
+        tests:
+          - unique
+          - not_null
+      - name: shipment_id
+        description: Natural key — unique shipment identifier.
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: Foreign key to dim_customers.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: warehouse_id
+        description: Foreign key to dim_warehouses.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_warehouses')
+              field: warehouse_id
+      - name: customer_geo_location_key
+        description: Foreign key to dim_geo_locations for the customer's location.
+        tests:
+          - relationships:
+              to: ref('dim_geo_locations')
+              field: geo_location_key
+      - name: warehouse_geo_location_key
+        description: Foreign key to dim_geo_locations for the warehouse's location.
+        tests:
+          - relationships:
+              to: ref('dim_geo_locations')
+              field: geo_location_key
+      - name: order_date
+        description: Date the order was placed.
+        tests:
+          - not_null
+      - name: shipment_status
+        description: Current shipment status.
+      - name: total_units_shipped
+        description: Sum of all units across line items.
+      - name: total_revenue_usd
+        description: Total calculated revenue for the shipment.
+      - name: total_fulfillment_days
+        description: Days from order to delivery (null if not delivered).
+      - name: fulfillment_tier
+        description: Derived fulfillment speed classification.
+        tests:
+          - accepted_values:
+              values: ['Express', 'Standard', 'Delayed', 'Pending']
+      - name: controlled_substance_units
+        description: Total units of DEA-controlled products in this shipment.
+
+  - name: mart_shipment_summary
+    description: >
+      Pre-aggregated shipment analytics mart. Summarizes shipment volume,
+      revenue, and fulfillment performance by month, product, region,
+      and warehouse. Designed for executive dashboards and BI tools.
+    columns:
+      - name: order_month
+        description: Truncated month of the order date.
+        tests:
+          - not_null
+      - name: therapeutic_area
+        description: Product therapeutic classification.
+      - name: product_name
+        description: Brand name of the product.
+      - name: customer_region
+        description: Geographic region of the receiving customer.
+      - name: warehouse_name
+        description: Originating distribution center.
+      - name: total_units
+        description: Total units shipped for this group.
+      - name: total_revenue_usd
+        description: Total revenue for this group.
+      - name: avg_fulfillment_days
+        description: Average fulfillment time in days.
+      - name: controlled_units
+        description: Units of controlled substances in this group.
